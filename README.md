@@ -1,0 +1,10 @@
+- 10 bài 3x3 chia 3 mức độ khác nhau
+- 50 bài 4x4 chia 5 cấp độ
+- 100 bài 5x5 chia 10 cấp độ
+- 500 bài 6x6 chia 10 cấp độ
+- 500 bài 7x7 chia 20 cấp độ
+- 1000 bài 8x8 chia 20 cấp độ
+- 2000 bài 9x9  chia 20 cấp độ nhé.
+- 500 bài 12x12 chia 10 cấp độ
+- 500 bài 16x16 chia 10 cấp độ
+- 500 bài 25x25 chia 10 cấp độ
