@@ -1,14 +1,20 @@
 package com.ndn.map;
 
+import java.util.Arrays;
+
 public class Map {
     private int[][] map;
     private int size;
     private int with, height; //number of boxes in a column and a row
     private int withOfBox, heightOfBox; // number of squares in with and height of box
+    private int score = 0;
 
     public Map(int size) {
         this.size = size;
         this.map = new int[size][size];
+        for(int i = 0; i < size; i++) {
+            Arrays.fill(this.map[i], -1);
+        }
     }
 
     public int size() {
@@ -50,7 +56,7 @@ public class Map {
     public void reset() {
         for(int i = 0; i < size; i++) {
             for(int j = 0; j < size; j++) {
-                set(i, j, 0);
+                set(i, j, -1);
             }
         }
     }
@@ -77,5 +83,43 @@ public class Map {
 
     public int lowestColOfBox(int box) {
         return 0;
+    }
+
+    public int rowOfBoxesContainRow(int row) {
+        return lowestRowOfBox(box(row, 0));
+    }
+
+    public int colOfBoxesContainCol(int col) {
+        return lowestColOfBox(box(0, col));
+    }
+    public int difficultyScore(Map answer) {
+        return 0;
+    }
+
+    public boolean full() {
+        for(int row = 0; row < size; row++) {
+            for(int col = 0; col < size; col++) {
+                if(get(row, col) == -1) return false;
+            }
+        }
+        return true;
+    }
+
+    public int numberOfEmptySquares() {
+        int count = 0;
+        for(int row = 0; row < size; row++) {
+            for(int col = 0; col < size; col++) {
+                if(get(row, col) == -1) count++;
+            }
+        }
+        return count;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

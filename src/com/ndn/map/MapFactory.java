@@ -1,26 +1,24 @@
-package com.ndn;
+package com.ndn.map;
 
-import com.ndn.map.*;
+public class MapFactory {
 
-public class Randomer {
     public static Map random(int size) {
         Map map = null;
         switch (size) {
             case 4:
-                map = new Map4();
+                return new Map4().random();
             case 6:
-                map = new Map6();
+                return new Map6().random();
             case 8:
-                map = new Map8();
+                return new Map8().random();
             case 9:
-                break;
+                return new Map9().random();
             case 12:
-                map = new Map12();
+                return new Map12().random();
             case 16:
-                map = new Map16();
+                return new Map16().random();
             case 25:
-                map = new Map25();
-                break;
+                return new Map25().random();
             case 5:
             case 7:
                 break;

@@ -1,9 +1,12 @@
 package com.ndn;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Util {
+    public static Random random = new Random();
+
     public static void permutation(ArrayList<Integer> set, ArrayList<ArrayList<Integer>> result) {
         permutation(new ArrayList<>(), set, result);
     }
@@ -42,5 +45,17 @@ public class Util {
             set.add(val);
         }
         return set;
+    }
+
+    public static int[] shuffleUp(int[] values) {
+        ArrayList<Integer> tmp = new ArrayList<>();
+        for(int i : values) tmp.add(i);
+        int[] shuffle = new int[values.length];
+        for(int i = 0; i < values.length; i++) {
+            int c = random.nextInt(tmp.size());
+            shuffle[i] = tmp.get(c);
+            tmp.remove(c);
+        }
+        return shuffle;
     }
 }
