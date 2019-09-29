@@ -2,6 +2,7 @@ package com.ndn;
 
 import com.ndn.map.BacktrackingSolution;
 import com.ndn.map.Map;
+import com.ndn.map.MapType1;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,21 +44,25 @@ public class PseudoMap {
         return map;
     }
 
-    void solve() {
-        foundReduction = true;
-        while (foundReduction) {
-            foundReduction = false;
-            easyReduction();
-            basicReduction();
-            advanceReduction();
-            professionalReduction();
-            find();
-            if (errorFound()) break;
+    void solve(long startedAt, long maxSolvingTime) {
+        if(map instanceof MapType1) {
+            foundReduction = true;
+            while (foundReduction) {
+                foundReduction = false;
+                easyReduction();
+                basicReduction();
+                advanceReduction();
+                professionalReduction();
+                find();
+                if (errorFound()) break;
+            }
         }
 
         if (!solved() && !errorFound()) {
             Map copy = this.map.cloneMap();
             BacktrackingSolution solution = new BacktrackingSolution();
+            solution.maxTime = maxSolvingTime;
+            solution.start = startedAt;
             boolean solved = solution.checkForOneSolution(copy);
             if(solved && solution.numberOfSolutions == 1) {
                 this.map = solution.solution;

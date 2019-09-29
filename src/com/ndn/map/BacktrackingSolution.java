@@ -2,15 +2,15 @@ package com.ndn.map;
 
 import com.ndn.Util;
 
-// copy of: https://github.com/noah978/Java-Sudoku-Generator
 public class BacktrackingSolution {
     public int numberOfSolutions = 0;
     public int counter = 0;
     public Map solution;
     private int[] root;
-
+    public long start;
+    public long maxTime = 1000000;
     public BacktrackingSolution(){
-
+        start = System.currentTimeMillis();
     }
 
     public BacktrackingSolution(int size){
@@ -27,6 +27,11 @@ public class BacktrackingSolution {
         counter++;
         if (numberOfSolutions >= 2) {
             return true;
+        }
+        
+        if(System.currentTimeMillis() - start >= maxTime) {
+            numberOfSolutions = 100;
+            return false;
         }
 
         if (r >= map.size()) {
@@ -86,8 +91,9 @@ public class BacktrackingSolution {
     }
 
     private boolean checkSquare(int r, int c, int num, Map map) {
-        for (int i = map.rowOfBoxesContainRow(r); i < map.rowOfBoxesContainRow(r) + map.getHeightOfBox(); i++) {
-            for (int j = map.colOfBoxesContainCol(c); j < map.colOfBoxesContainCol(c) + map.getWithOfBox(); j++) {
+        for (int i = 0; i < map.size(); i++) {
+            for (int j = 0; j < map.size(); j++) {
+                if(!map.sameBox(i, j, r, c)) continue;
                 if (map.get(i, j) == num)
                     return false;
             }

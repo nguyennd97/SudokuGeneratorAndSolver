@@ -117,8 +117,12 @@ public class MapType1 extends Map {
             boxExisted[box(row, 0)][val] = true;
         }
 
-        if (size() > 20) quickPermuteRandomly();
-        else slowPermuteRandomly();
+        if (size() > 20) {
+            quickPermuteRandomly();
+        } else {
+            slowPermuteRandomly();
+        }
+        shuffleMap();
         return this;
     }
 
@@ -260,8 +264,7 @@ public class MapType1 extends Map {
     }
 
     private void quickPermuteRandomly() {
-        Random random = new Random();
-        // step 1: random column
+        // random column
         ArrayList<Integer> set = new ArrayList<>();
         for (int i = 0; i < this.getWithOfBox(); i++) set.add(i);
         ArrayList<ArrayList<Integer>> permutation = new ArrayList<>();
@@ -279,10 +282,14 @@ public class MapType1 extends Map {
                 }
             }
         }
+    }
+
+    private void shuffleMap(){
+        Random random = new Random();
         // step 2: swap rows
-        set = new ArrayList<>();
+        ArrayList<Integer> set = new ArrayList<>();
         for (int i = 0; i < this.getHeightOfBox(); i++) set.add(i);
-        permutation = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> permutation = new ArrayList<>();
         Util.permutation(set, permutation);
         for (int row = 0; row < this.getHeight(); row++) {
             int[][] temp = new int[this.getHeightOfBox()][this.size()];
