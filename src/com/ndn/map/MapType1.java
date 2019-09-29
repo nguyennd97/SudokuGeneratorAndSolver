@@ -18,44 +18,43 @@ public class MapType1 extends Map {
     public int difficultyScore(Map answer) {
         Map question = cloneMap();
         int score = 0;
-        while (true) {
-            if(full()) break;
+        while (!full()) {
             int minChoicesOfAllSquares = Integer.MAX_VALUE;
             int minRow = 0, minCol = 0;
             for (int row = 0; row < size(); row++) {
                 for (int col = 0; col < size(); col++) {
-                    if(get(row, col) != -1) continue;
+                    if (get(row, col) != -1) continue;
                     boolean[] existed = new boolean[size()];
 
-                    for(int r = 0; r < size(); r++) {
-                        if(r == row) continue;
-                        if(get(r, col) == -1) continue;
+                    for (int r = 0; r < size(); r++) {
+                        if (r == row) continue;
+                        if (get(r, col) == -1) continue;
                         existed[get(r, col)] = true;
                     }
-                    for(int c = 0; c < size(); c++) {
-                        if(c == col) continue;
-                        if(get(row, c) == -1) continue;
+                    for (int c = 0; c < size(); c++) {
+                        if (c == col) continue;
+                        if (get(row, c) == -1) continue;
                         existed[get(row, c)] = true;
                     }
-                    for(int r = rowOfBoxesContainRow(row); r < rowOfBoxesContainRow(row) + getHeightOfBox(); r++) {
-                        for(int c = colOfBoxesContainCol(col); c < colOfBoxesContainCol(col) + getWithOfBox(); c++) {
-                            if(r == row || c == col) continue;
-                            if(get(r, c) == -1) continue;
+                    for (int r = rowOfBoxesContainRow(row); r < rowOfBoxesContainRow(row) + getHeightOfBox(); r++) {
+                        for (int c = colOfBoxesContainCol(col); c < colOfBoxesContainCol(col) + getWithOfBox(); c++) {
+                            if (r == row || c == col) continue;
+                            if (get(r, c) == -1) continue;
                             existed[get(r, c)] = true;
                         }
                     }
                     int s = 0;
-                    for(boolean b : existed) {
+                    for (boolean b : existed) {
                         s += b ? 0 : 1;
                     }
-                    if(minChoicesOfAllSquares > s) {
+                    if (minChoicesOfAllSquares > s) {
                         minChoicesOfAllSquares = s;
                         minRow = row;
                         minCol = col;
                     }
                 }
             }
-            if(minChoicesOfAllSquares != Integer.MAX_VALUE) {
+            if (minChoicesOfAllSquares != Integer.MAX_VALUE) {
                 score += (minChoicesOfAllSquares - 1) * (minChoicesOfAllSquares - 1) * 100;
                 set(minRow, minCol, answer.get(minRow, minCol));
             }
@@ -118,7 +117,7 @@ public class MapType1 extends Map {
             boxExisted[box(row, 0)][val] = true;
         }
 
-        if (size() > 6) quickPermuteRandomly();
+        if (size() > 20) quickPermuteRandomly();
         else slowPermuteRandomly();
         return this;
     }
@@ -189,6 +188,18 @@ public class MapType1 extends Map {
 
     // slower but looks better
     private boolean slowPermuteRandomly() {
+        BacktrackingSolution solution = new BacktrackingSolution(this.size());
+        solution.randomNewMap(0, 0, this);
+        if(solution.numberOfSolutions == 1) {
+            this.setMap(solution.solution.getMap());
+            return true;
+        }
+
+        if(size() > 9) {
+            quickPermuteRandomly();
+            return true;
+        }
+
         int[] min = new int[0];
         int minRow = -1, minCol = -1;
         boolean containEmpty = false;

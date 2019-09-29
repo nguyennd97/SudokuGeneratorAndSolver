@@ -1,10 +1,23 @@
 package com.ndn.map;
 
+import com.ndn.Util;
+
 // copy of: https://github.com/noah978/Java-Sudoku-Generator
 public class BacktrackingSolution {
     public int numberOfSolutions = 0;
     public int counter = 0;
     public Map solution;
+    private int[] root;
+
+    public BacktrackingSolution(){
+
+    }
+
+    public BacktrackingSolution(int size){
+        root = new int[size];
+        for(int i = 0; i < size; i++) root[i] = i;
+    }
+
 
     public boolean checkForOneSolution(Map map) {
         return checkForOneSolution(0, 0, map);
@@ -37,6 +50,37 @@ public class BacktrackingSolution {
             if (checkSquare(r, c, num, map) && checkRow(r, num, map) && checkColumn(c, num, map)) {
                 map.set(r, c, num);
                 checkForOneSolution(r, c + 1, map);
+            }
+        }
+    }
+
+    public boolean randomNewMap(int r, int c, Map map){
+        if (numberOfSolutions >= 1) {
+            return true;
+        }
+        counter++;
+        if (r >= map.size()) {
+            numberOfSolutions++;
+            this.solution = map.cloneMap();
+            return false;
+        }
+        if (c >= map.size()) {
+            return randomNewMap(r + 1, 0, map);
+        }
+        if (map.get(r, c) != -1) {
+            return randomNewMap(r, c + 1, map);
+        }
+        int num = -1;
+        int[] shuffle = Util.shuffleUp(root);
+        while (true) {
+            map.set(r, c, -1);
+            num++;
+            if (num >= map.size()) {
+                return true;
+            }
+            if (checkSquare(r, c, shuffle[num], map) && checkRow(r, shuffle[num], map) && checkColumn(c, shuffle[num], map)) {
+                map.set(r, c, shuffle[num]);
+                randomNewMap(r, c + 1, map);
             }
         }
     }

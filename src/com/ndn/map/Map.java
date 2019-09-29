@@ -122,4 +122,18 @@ public class Map {
     public void setScore(int score) {
         this.score = score;
     }
+
+    public String code(){
+        StringBuilder builder = new StringBuilder();
+        for(int row = 0; row < size; row++) {
+            for(int col = 0; col < size; col++) {
+                if(get(row, col) == -1) builder.append("00");
+                else if(get(row, col) < 10) builder.append("0").append(get(row, col));
+                else {
+                    builder.append(get(row, col));
+                }
+            }
+        }
+        return builder.toString();
+    }
 }
