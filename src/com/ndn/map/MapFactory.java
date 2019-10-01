@@ -22,7 +22,7 @@ public class MapFactory {
             case 5:
                 return new Map5().random();
             case 7:
-                break;
+                return new Map7().random();
             case 3:
                 break;
         }

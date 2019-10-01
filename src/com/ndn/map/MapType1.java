@@ -1,5 +1,6 @@
 package com.ndn.map;
 
+import com.ndn.PseudoMap;
 import com.ndn.Util;
 
 import java.util.ArrayList;
@@ -12,57 +13,6 @@ public class MapType1 extends Map {
 
     MapType1(int size) {
         super(size);
-    }
-
-    @Override
-    public int difficultyScore(Map answer) {
-        Map question = cloneMap();
-        int score = 0;
-        while (!full()) {
-            int minChoicesOfAllSquares = Integer.MAX_VALUE;
-            int minRow = 0, minCol = 0;
-            for (int row = 0; row < size(); row++) {
-                for (int col = 0; col < size(); col++) {
-                    if (get(row, col) != -1) continue;
-                    boolean[] existed = new boolean[size()];
-
-                    for (int r = 0; r < size(); r++) {
-                        if (r == row) continue;
-                        if (get(r, col) == -1) continue;
-                        existed[get(r, col)] = true;
-                    }
-                    for (int c = 0; c < size(); c++) {
-                        if (c == col) continue;
-                        if (get(row, c) == -1) continue;
-                        existed[get(row, c)] = true;
-                    }
-                    for (int r = rowOfBoxesContainRow(row); r < rowOfBoxesContainRow(row) + getHeightOfBox(); r++) {
-                        for (int c = colOfBoxesContainCol(col); c < colOfBoxesContainCol(col) + getWithOfBox(); c++) {
-                            if (r == row || c == col) continue;
-                            if (get(r, c) == -1) continue;
-                            existed[get(r, c)] = true;
-                        }
-                    }
-                    int s = 0;
-                    for (boolean b : existed) {
-                        s += b ? 0 : 1;
-                    }
-                    if (minChoicesOfAllSquares > s) {
-                        minChoicesOfAllSquares = s;
-                        minRow = row;
-                        minCol = col;
-                    }
-                }
-            }
-            if (minChoicesOfAllSquares != Integer.MAX_VALUE) {
-                score += (minChoicesOfAllSquares - 1) * (minChoicesOfAllSquares - 1) * 100;
-                set(minRow, minCol, answer.get(minRow, minCol));
-            }
-        }
-
-        this.setMap(question.getMap());
-        score += numberOfEmptySquares();
-        return score;
     }
 
     @Override

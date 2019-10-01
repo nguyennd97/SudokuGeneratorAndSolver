@@ -7,19 +7,20 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+// generates sudoku puzzles and print to file text.
 public class Run {
-    public static void main(String... args) {
+    public static void main(String... args) throws UnsupportedEncodingException {
         // properties
-        int level = 8;
+        int level = 9;
         int numberOfLessons = 100;
-        int minScore = 800;
-        int maxScore = 1000000;
-        String path = "sudoku8x8\\Level_5.txt";
+        int minScore = 21;
+        int maxScore = 100;
+        String path = "result/sudoku9x9/Level_2.txt";
 
         //cac cac cac
         ArrayList<Map> maps = new ArrayList<>();
         while (numberOfLessons > 0) {
-            Map map = Generator.generateRandomMap(level, 2000, minScore, maxScore);
+            Map map = Generator.generateRandomMap(level, 10000, minScore, maxScore);
             if(map.getScore() >= minScore && map.getScore() <= maxScore) {
                 maps.add(map);
                 numberOfLessons--;
@@ -34,22 +35,18 @@ public class Run {
         int index = 1;
         StringBuilder out = new StringBuilder();
         for(Map map : maps) {
-            out.append(System.getProperty("line.separator"));
+            out.append(Util.newLine);
             out.append("Lesson >> ").append(index++);
-            out.append(System.getProperty("line.separator"));
+            out.append(Util.newLine);
             out.append("Difficulty score: ").append(map.getScore());
-            out.append(System.getProperty("line.separator"));
+            out.append(Util.newLine);
             out.append(map.toString());
-            out.append(System.getProperty("line.separator"));
+            out.append(Util.newLine);
             out.append(map.getSolution().toString());
         }
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream("C:\\Users\\NguyenDangNguyen\\Desktop\\" + path), StandardCharsets.UTF_8))) {
+                new FileOutputStream(path), StandardCharsets.UTF_8))) {
             writer.write(out.toString());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

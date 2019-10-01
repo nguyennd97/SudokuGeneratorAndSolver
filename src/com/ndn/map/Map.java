@@ -1,5 +1,7 @@
 package com.ndn.map;
 
+import com.ndn.PseudoMap;
+
 import java.util.Arrays;
 
 public class Map {
@@ -79,7 +81,10 @@ public class Map {
     }
 
     public void setMap(int[][] map) {
-        this.map = map;
+        this.map = new int[size][size];
+        for(int i = 0; i < size; i++) {
+            System.arraycopy(map[i], 0, this.map[i], 0, size);
+        }
     }
 
     public int[][] getMap() {
@@ -102,11 +107,79 @@ public class Map {
         return lowestColOfBox(box(0, col));
     }
 
-    public int difficultyScore(Map answer) {
-        return 0;
+    private int[] getMinChoiceSquare() {
+        int minChoicesOfAllSquares = Integer.MAX_VALUE;
+        int minRow = 0, minCol = 0;
+        for (int row = 0; row < size(); row++) {
+            for (int col = 0; col < size(); col++) {
+                if (get(row, col) != -1) continue;
+                boolean[] existed = new boolean[size()];
+
+                for (int r = 0; r < size(); r++) {
+                    if (r == row) continue;
+                    if (get(r, col) == -1) continue;
+                    existed[get(r, col)] = true;
+                }
+                for (int c = 0; c < size(); c++) {
+                    if (c == col) continue;
+                    if (get(row, c) == -1) continue;
+                    existed[get(row, c)] = true;
+                }
+                for (int r = 0; r < size(); r++) {
+                    for (int c = 0; c < size(); c++) {
+                        if (!sameBox(r, c, row, col)) continue;
+                        if (r == row || c == col) continue;
+                        if (get(r, c) == -1) continue;
+                        existed[get(r, c)] = true;
+                    }
+                }
+                int s = 0;
+                for (boolean b : existed) {
+                    s += b ? 0 : 1;
+                }
+                if (minChoicesOfAllSquares > s) {
+                    minChoicesOfAllSquares = s;
+                    minRow = row;
+                    minCol = col;
+                }
+            }
+        }
+        return new int[]{minChoicesOfAllSquares, minRow, minCol};
     }
 
-    public boolean full() {
+    public int difficultyScore(Map answer) {
+        Map question = cloneMap();
+        int score = 0;
+        while (!full()) {
+            int[] t = getMinChoiceSquare();
+            int minChoicesOfAllSquares = t[0];
+            int minRow = t[1];
+            int minCol = t[2];
+            if (minChoicesOfAllSquares != Integer.MAX_VALUE) {
+                score += (minChoicesOfAllSquares - 1) * (minChoicesOfAllSquares - 1) * 100;
+                set(minRow, minCol, answer.get(minRow, minCol));
+            }
+        }
+        this.setMap(question.getMap());
+        while (!full()) {
+            PseudoMap pseudoMap = new PseudoMap(this);
+            pseudoMap.solveLikeHuman();
+            this.setMap(pseudoMap.getResult().getMap());
+            int[] t = getMinChoiceSquare();
+            int minChoicesOfAllSquares = t[0];
+            int minRow = t[1];
+            int minCol = t[2];
+            if (minChoicesOfAllSquares != Integer.MAX_VALUE) {
+                score += (minChoicesOfAllSquares - 1) * (minChoicesOfAllSquares - 1) * 1000;
+                set(minRow, minCol, answer.get(minRow, minCol));
+            }
+        }
+        this.setMap(question.getMap());
+        score += numberOfEmptySquares();
+        return score;
+    }
+
+    private boolean full() {
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 if (get(row, col) == -1) return false;

@@ -14,7 +14,7 @@ public class PseudoMap {
     private int size;
     public Map map;
 
-    PseudoMap(Map map) {
+    public PseudoMap(Map map) {
         pseudo = new int[map.size()][map.size()][];
         size = map.size();
         this.map = map;
@@ -31,7 +31,7 @@ public class PseudoMap {
         }
     }
 
-    Map getResult() {
+    public Map getResult() {
         for(int row = 0; row < size; row++) {
             for(int col = 0; col < size; col++) {
                 if(!done(row, col)) {
@@ -45,19 +45,7 @@ public class PseudoMap {
     }
 
     void solve(long startedAt, long maxSolvingTime) {
-        if(map instanceof MapType1) {
-            foundReduction = true;
-            while (foundReduction) {
-                foundReduction = false;
-                easyReduction();
-                basicReduction();
-                advanceReduction();
-                professionalReduction();
-                find();
-                if (errorFound()) break;
-            }
-        }
-
+        solveLikeHuman();
         if (!solved() && !errorFound()) {
             Map copy = this.map.cloneMap();
             BacktrackingSolution solution = new BacktrackingSolution();
@@ -69,6 +57,19 @@ public class PseudoMap {
                 PseudoMap pseudoMap = new PseudoMap(map);
                 this.pseudo = pseudoMap.pseudo;
             }
+        }
+    }
+
+    public void solveLikeHuman(){
+        foundReduction = true;
+        while (foundReduction) {
+            foundReduction = false;
+            easyReduction();
+            basicReduction();
+            advanceReduction();
+            professionalReduction();
+            find();
+            if (errorFound()) break;
         }
     }
 
@@ -184,8 +185,9 @@ public class PseudoMap {
                     if (r == row) continue;
                     deleteExisted(r, column, existed);
                 }
-                for (int r = map.rowOfBoxesContainRow(row); r < map.rowOfBoxesContainRow(row) + map.getHeightOfBox(); r++) {
-                    for (int c = map.colOfBoxesContainCol(column); c < map.colOfBoxesContainCol(column) + map.getWithOfBox(); c++) {
+                for (int r = 0; r < size; r++) {
+                    for (int c = 0; c < size; c++) {
+                        if(!map.sameBox(row, column, r, c)) continue;
                         if (r == row && c == column) continue;
                         deleteExisted(r, c, existed);
                     }
@@ -196,8 +198,11 @@ public class PseudoMap {
 
     private void basicReduction() {
         //row
+        boolean[][] checkedRows = new boolean[size][size];
         for (int row = 0; row < size; row++) {
-            for (int column = 0; column < size; column += map.getWithOfBox()) {
+            for (int column = 0; column < size; column++) {
+                if(checkedRows[row][map.box(row, column)]) continue;
+                checkedRows[row][map.box(row, column)] = true;
                 //Lưu các số có thể có ở các ô cùng hàng khác hộp.
                 boolean[] existed = new boolean[size];
                 Arrays.fill(existed, true);
@@ -208,18 +213,20 @@ public class PseudoMap {
                 }
 
                 //Duyệt qua các ô cùng hộp khác hàng.
-                for (int r = map.rowOfBoxesContainRow(row); r < map.rowOfBoxesContainRow(row) + map.getHeightOfBox(); r++) {
+                for (int r = 0; r < size; r++) {
                     if (r == row) continue;
-                    for (int c = map.colOfBoxesContainCol(column); c < map.colOfBoxesContainCol(column) + map.getWithOfBox(); c++) {
+                    for (int c = 0; c < size; c++) {
+                        if(!map.sameBox(row, column, r, c)) continue;
                         deleteExisted(r, c, existed);
                     }
                 }
                 //Lưu các số có thể có ở các ô cùng hộp khác hàng
                 Arrays.fill(existed, true);
 
-                for (int r = map.rowOfBoxesContainRow(row); r < map.rowOfBoxesContainRow(row) + map.getHeightOfBox(); r++) {
+                for (int r = 0; r < size; r++) {
                     if (r == row) continue;
-                    for (int c = map.colOfBoxesContainCol(column); c < map.colOfBoxesContainCol(column) + map.getWithOfBox(); c++) {
+                    for (int c = 0; c < size; c++) {
+                        if(!map.sameBox(row, column, r, c)) continue;
                         for (int p : pseudo[r][c]) existed[p] = false;
                     }
                 }
@@ -232,8 +239,11 @@ public class PseudoMap {
             }
         }
 
-        for (int row = 0; row < size; row += map.getHeightOfBox()) {
+        boolean[][] checkedColumns = new boolean[size][size];
+        for (int row = 0; row < size; row++) {
             for (int column = 0; column < size; column++) {
+                if(checkedColumns[map.box(row, column)][column]) continue;
+                checkedColumns[map.box(row, column)][column] = true;
                 //Lưu các số có thể có ở các ô cùng cột khác hộp.
                 boolean[] colExisted = new boolean[size];
                 Arrays.fill(colExisted, true);
@@ -244,8 +254,9 @@ public class PseudoMap {
                 }
 
                 //Duyệt qua các ô cùng hộp khác cột.
-                for (int r = map.rowOfBoxesContainRow(row); r < map.rowOfBoxesContainRow(row) + map.getHeightOfBox(); r++) {
-                    for (int c = map.colOfBoxesContainCol(column); c < map.colOfBoxesContainCol(column) + map.getWithOfBox(); c++) {
+                for (int r = 0; r < size; r++) {
+                    for (int c = 0; c < size; c++) {
+                        if(!map.sameBox(row, column, r, c)) continue;
                         if (c == column) continue;
                         deleteExisted(r, c, colExisted);
                     }
@@ -254,8 +265,9 @@ public class PseudoMap {
                 boolean[] boxExisted = new boolean[size];
                 Arrays.fill(boxExisted, true);
 
-                for (int r = map.rowOfBoxesContainRow(row); r < map.rowOfBoxesContainRow(row) + map.getHeightOfBox(); r++) {
-                    for (int c = map.colOfBoxesContainCol(column); c < map.colOfBoxesContainCol(column) + map.getWithOfBox(); c++) {
+                for (int r = 0; r < size; r++) {
+                    for (int c = 0; c < size; c++) {
+                        if(!map.sameBox(row, column, r, c)) continue;
                         if (c == column) continue;
                         for (int p : pseudo[r][c]) boxExisted[p] = false;
                     }
@@ -273,8 +285,11 @@ public class PseudoMap {
     private void advanceReduction() {
         int count;
         boolean[] existed = new boolean[size];
+        boolean[][] checkedRows = new boolean[size][size];
         for (int row = 0; row < size; row++) {
-            for (int column = 0; column < size; column += map.getWithOfBox()) {
+            for (int column = 0; column < size; column++) {
+                if(checkedRows[row][map.box(row, column)]) continue;
+                checkedRows[row][map.box(row, column)] = true;
                 //row with box
                 Arrays.fill(existed, true);
                 count = 0;
@@ -287,9 +302,10 @@ public class PseudoMap {
                 }
 
                 ArrayList<int[]> notDone = new ArrayList<>();
-                for (int r = map.rowOfBoxesContainRow(row); r < map.rowOfBoxesContainRow(row) + map.getHeightOfBox(); r++) {
+                for (int r = 0; r < size; r++) {
                     if (r == row) continue;
-                    for (int c = map.colOfBoxesContainCol(column); c < map.colOfBoxesContainCol(column) + map.getWithOfBox(); c++) {
+                    for (int c = 0; c < size; c++) {
+                        if(!map.sameBox(row, column, r, c)) continue;
                         if (done(r, c) && !existed[pseudo[r][c][0]]) {
                             existed[pseudo[r][c][0]] = true;
                             count--;
@@ -307,9 +323,10 @@ public class PseudoMap {
                 //box with row
                 Arrays.fill(existed, true);
                 count = 0;
-                for (int r = map.rowOfBoxesContainRow(row); r < map.rowOfBoxesContainRow(row) + map.getHeightOfBox(); r++) {
+                for (int r = 0; r < size; r++) {
                     if (r == row) continue;
-                    for (int c = map.colOfBoxesContainCol(column); c < map.colOfBoxesContainCol(column) + map.getWithOfBox(); c++) {
+                    for (int c = 0; c < size; c++) {
+                        if(!map.sameBox(row, column, r, c)) continue;
                         if (done(r, c)) {
                             existed[pseudo[r][c][0]] = false;
                             count++;
@@ -335,8 +352,11 @@ public class PseudoMap {
             }
         }
 
-        for (int row = 0; row < size; row += map.getHeightOfBox()) {
+        boolean[][] checkedColumns = new boolean[size][size];
+        for (int row = 0; row < size; row++) {
             for (int column = 0; column < size; column++) {
+                if(checkedColumns[map.box(row, column)][column]) continue;
+                checkedColumns[map.box(row, column)][column] = true;
                 //row with box
                 Arrays.fill(existed, true);
                 count = 0;
@@ -349,9 +369,10 @@ public class PseudoMap {
                 }
 
                 ArrayList<int[]> notDone = new ArrayList<>();
-                for (int c = map.colOfBoxesContainCol(column); c < map.colOfBoxesContainCol(column) + map.getWithOfBox(); c++) {
+                for (int c = 0; c < size; c++) {
                     if (c == column) continue;
-                    for (int r = map.rowOfBoxesContainRow(row); r < map.rowOfBoxesContainRow(row) + map.getHeightOfBox(); r++) {
+                    for (int r = 0; r < size; r++) {
+                        if(!map.sameBox(row, column, r, c)) continue;
                         if (done(r, c) && !existed[pseudo[r][c][0]]) {
                             existed[pseudo[r][c][0]] = true;
                             count--;
@@ -369,9 +390,10 @@ public class PseudoMap {
                 //box with row
                 Arrays.fill(existed, true);
                 count = 0;
-                for (int c = map.colOfBoxesContainCol(column); c < map.colOfBoxesContainCol(column) + map.getWithOfBox(); c++) {
+                for (int c = 0; c < size; c++) {
                     if (c == column) continue;
-                    for (int r = map.rowOfBoxesContainRow(row); r < map.rowOfBoxesContainRow(row) + map.getHeightOfBox(); r++) {
+                    for (int r = 0; r < size; r++) {
+                        if(!map.sameBox(row, column, r, c)) continue;
                         if (done(r, c)) {
                             existed[pseudo[r][c][0]] = false;
                             count++;
@@ -441,8 +463,9 @@ public class PseudoMap {
                 Arrays.fill(equal, false);
                 count = 1;
                 int index = -1;
-                for (int r = map.rowOfBoxesContainRow(row); r < map.rowOfBoxesContainRow(row) + map.getHeightOfBox(); r++) {
-                    for (int c = map.colOfBoxesContainCol(column); c < map.colOfBoxesContainCol(column) + map.getWithOfBox(); c++) {
+                for (int r = 0; r < size; r++) {
+                    for (int c = 0; c < size; c++) {
+                        if(!map.sameBox(row, column, r, c)) continue;
                         index++;
                         if (r == row && c == column) continue;
                         if (done(r, c)) continue;
@@ -454,8 +477,9 @@ public class PseudoMap {
                 }
                 index = -1;
                 if (count == length(row, column)) {
-                    for (int r = map.rowOfBoxesContainRow(row); r < map.rowOfBoxesContainRow(row) + map.getHeightOfBox(); r++) {
-                        for (int c = map.colOfBoxesContainCol(column); c < map.colOfBoxesContainCol(column); c++) {
+                    for (int r = 0; r < size; r++) {
+                        for (int c = 0; c < size; c++) {
+                            if(!map.sameBox(row, column, r, c)) continue;
                             index++;
                             if (r == row && c == column) continue;
                             if (done(r, c) || equal[index]) continue;
@@ -516,8 +540,9 @@ public class PseudoMap {
                 //box
                 Arrays.fill(existed, false);
                 count = size;
-                for (int r = map.rowOfBoxesContainRow(row); r < map.rowOfBoxesContainRow(row) + map.getHeightOfBox(); r++) {
-                    for (int c = map.colOfBoxesContainCol(column); c < map.colOfBoxesContainCol(column) + map.getWithOfBox(); c++) {
+                for (int r = 0; r < size; r++) {
+                    for (int c = 0; c < size; c++) {
+                        if(!map.sameBox(row, column, r, c)) continue;
                         if (r == row && c == column) continue;
                         for (int p : pseudo[r][c]) {
                             if (!existed[p]) {

@@ -3,6 +3,11 @@
 Example: Generate sudoku 9x9 in maximum 5 seconds and get score between 1 to 5000.
 
     Map map = Generator.generateRandomMap(9, 5000, 1, 5000);
+    
+###### Score of sudoku puzzle is defined:
++ `<` **100** : know the rule
++ `>` **100** and `<` **1000** : know some techniques
++  `>` **1000** : requires flat-out trial (_`score / 1000`_ is the number of tries)
 
 To show the map as string, use `map.toString()`
 
@@ -27,7 +32,7 @@ Supported:
 - 4x4
 - 5x5
 - 6x6
-- ~~7x7~~
+- 7x7
 - 8x8
 - 9x9
 - 12x12
