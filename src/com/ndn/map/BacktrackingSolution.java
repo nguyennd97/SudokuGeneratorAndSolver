@@ -39,12 +39,15 @@ public class BacktrackingSolution {
             this.solution = map.cloneMap();
             return false;
         }
+
         if (c >= map.size()) {
             return checkForOneSolution(r + 1, 0, map);
         }
+
         if (map.get(r, c) != -1) {
             return checkForOneSolution(r, c + 1, map);
         }
+
         int num = -1;
         while (true) {
             map.set(r, c, -1);
@@ -52,6 +55,9 @@ public class BacktrackingSolution {
             if (num >= map.size()) {
                 return true;
             }
+
+            if(numberOfSolutions >= 2) return false;
+
             if (checkSquare(r, c, num, map) && checkRow(r, num, map) && checkColumn(c, num, map)) {
                 map.set(r, c, num);
                 checkForOneSolution(r, c + 1, map);

@@ -9,18 +9,21 @@ import java.util.Comparator;
 
 // generates sudoku puzzles and print to file text.
 public class Run {
-    public static void main(String... args) throws UnsupportedEncodingException {
+
+    static void randomAndSaveToFile(){
         // properties
-        int level = 9;
-        int numberOfLessons = 100;
-        int minScore = 21;
-        int maxScore = 100;
-        String path = "result/sudoku9x9/Level_2.txt";
+        int level = 16;
+        int numberOfLessons = 300;
+        int minScore = 1;
+        int maxScore = 10000000;
+        String path = "result/sudoku16x16/Level_5.txt";
 
         //cac cac cac
         ArrayList<Map> maps = new ArrayList<>();
         while (numberOfLessons > 0) {
-            Map map = Generator.generateRandomMap(level, 10000, minScore, maxScore);
+            Map map = Generator.generateRandomMap(level, 30000, minScore, maxScore);
+            System.out.println(map.getScore());
+            System.out.println(map);
             if(map.getScore() >= minScore && map.getScore() <= maxScore) {
                 maps.add(map);
                 numberOfLessons--;
@@ -50,5 +53,8 @@ public class Run {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public static void main(String... args) {
+        randomAndSaveToFile();
     }
 }
