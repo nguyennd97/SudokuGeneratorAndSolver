@@ -26,7 +26,7 @@ public class BacktrackingSolution {
     public boolean checkForOneSolution(int r, int c, Map map) {
         counter++;
         if (numberOfSolutions >= 2) {
-            return true;
+            return false;
         }
         
         if(System.currentTimeMillis() - start >= maxTime) {
@@ -60,14 +60,15 @@ public class BacktrackingSolution {
 
             if (checkSquare(r, c, num, map) && checkRow(r, num, map) && checkColumn(c, num, map)) {
                 map.set(r, c, num);
-                checkForOneSolution(r, c + 1, map);
+                boolean flag = checkForOneSolution(r, c + 1, map);
+                if(!flag) return false;
             }
         }
     }
 
     public boolean randomNewMap(int r, int c, Map map){
         if (numberOfSolutions >= 1) {
-            return true;
+            return false;
         }
         counter++;
         if (r >= map.size()) {
@@ -91,7 +92,8 @@ public class BacktrackingSolution {
             }
             if (checkSquare(r, c, shuffle[num], map) && checkRow(r, shuffle[num], map) && checkColumn(c, shuffle[num], map)) {
                 map.set(r, c, shuffle[num]);
-                randomNewMap(r, c + 1, map);
+                boolean flag = randomNewMap(r, c + 1, map);
+                if(!flag) return false;
             }
         }
     }
