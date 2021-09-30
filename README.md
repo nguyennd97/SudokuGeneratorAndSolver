@@ -1,5 +1,5 @@
     
-    Map map = Generator.generateRandomMap(size, time(ms), minScore, maxScore);
+    Map map = Generator.generateRandomMap(size of puzzle (example: 9x9 is 9), time(ms) (maximum thinking time), minScore (minimum score of generated map), maxScore (maximum score of generated map));
 Example: Generate sudoku 9x9 in maximum 5 seconds and get score between 1 to 5000.
 
     Map map = Generator.generateRandomMap(9, 5000, 1, 5000);
@@ -15,7 +15,7 @@ To get score of a puzzle, use `map.difficultyScore(answer)` where **_answer_** i
 
 To solve a puzzle use:
 
-    int size = <your type of sudoku puzzle>;
+    int size = <your size of sudoku puzzle, example: 9x9 is 9, 7x7 is 7>;
     int[][] puzzle = <your puzzle, minus numbers in all your puzzle's squares 1, for example: empty square 0 becomes -1, 1 becomes 0>;
     // init puzzle
     Map map = MapFactory.get(size);
