@@ -249,9 +249,22 @@ Support Classic Form Only
 To generate new puzzle use `Generator.generate(size of puzzle, maximum time, minimum score, maximum score)`
 In which `size of puzzle` is length of puzzle edge. Example 9x9 is 9, 25x25 is 25, ..etc.
 
-Example generate 8x8 puzzle within 5 seconds with minimum score of 10 and maximum score of 1.000.000:
+Example:
 ```java
-Game game = Generator.generate(8,  5 * 1000, 10, 1000000);
+// register new form to generate puzzle
+// generator will select random form of registered forms 
+// and generate a puzzle with that form
+Puzzle7.registerForm(new Puzzle7.Form(new int[][]{
+    {0, 0, 1, 1, 1, 1, 2},
+    {0, 0, 0, 1, 1, 1, 2},
+    {3, 0, 0, 4, 4, 2, 2},
+    {3, 3, 4, 4, 4, 2, 2},
+    {3, 3, 4, 4, 6, 6, 2},
+    {3, 5, 5, 5, 6, 6, 6},
+    {3, 5, 5, 5, 5, 6, 6}
+}));
+// generate 7x7 puzzle within 5 seconds with minimum score of 10 and maximum score of 1.000.000
+Game game = Generator.generate(7,  5 * 1000, 10, 1000000);
 // score of generated puzzle
 System.out.println("Score: " + game.getScore());
 // puzzle
@@ -299,6 +312,7 @@ Puzzle solved = PuzzleSolver.solve(puzzle, 5 * 1000);
 System.out.println(solved);
 ```
 
+See Example: https://github.com/dangnguyendota/SudokuGeneratorAndSolver/blob/master/src/vn/com/dangnguyendota/Example.java
     
 
 Supported:
