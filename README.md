@@ -1,6 +1,7 @@
 ## Contents
 - [Generator](#generator)
 - [Solver](#solver)
+- [Score](#score)
 - [Puzzle Form](#puzzle-form)
     * [Supported Form](#supported-form)
         + [4x4](#4x4)
@@ -12,7 +13,6 @@
         + [12x12](#12x12)
         + [16x16](#16x16)
         + [25x25](#25x25)
-- [Score](#score)
 
 ## Generator
 
@@ -72,6 +72,20 @@ puzzle.setBoard(new int[][]{
 Puzzle solved = PuzzleSolver.solve(puzzle, 5 * 1000);
 System.out.println(solved);
 ```
+
+
+## Score
+
+Score of sudoku puzzle is defined
++ `<` **100** : know the rule
++ `>` **100** and `<` **1000** : know some techniques
++ `>` **1000** : requires flat-out trial (_`score / 1000`_ is the number of tries)
+
+The Puzzle with higher score is harder to solve.
+
+To show the puzzle as string, use `puzzle.toString()`
+
+To get score of a puzzle, use `puzzle.difficultyScore(answer)` where **_answer_** is the solved puzzle.
 
 ## Puzzle Form
 Puzzle form is form of all boxes inside the puzzle. **The first box index is 0**.
@@ -318,20 +332,6 @@ Support Classic Form Only
 
 #### 25x25
 Support Classic Form Only
-
-## Score
-
-Score of sudoku puzzle is defined
-+ `<` **100** : know the rule
-+ `>` **100** and `<` **1000** : know some techniques
-+ `>` **1000** : requires flat-out trial (_`score / 1000`_ is the number of tries)
-
-The Puzzle with higher score is harder to solve.
-
-To show the puzzle as string, use `puzzle.toString()`
-
-To get score of a puzzle, use `puzzle.difficultyScore(answer)` where **_answer_** is the solved puzzle.
-
 
 See Example: https://github.com/dangnguyendota/SudokuGeneratorAndSolver/blob/master/src/vn/com/dangnguyendota/Example.java
 
