@@ -47,6 +47,34 @@ System.out.println(game.getAnswer());
 // use game.getQuestion().isClassicForm() to check classic form.
 game.getQuestion().getForm();
 ```
+ 
+Using specified form:
+```java
+// generate 7x7 puzzle within 5 seconds with minimum score of 10 and maximum score of 1.000.000, specify which form will be use 
+Game game = Generator.generate(7, 5 * 1000, 10, 1000000, new int[][]{
+     {0, 0, 1, 1, 1, 1, 2},
+     {0, 0, 0, 1, 1, 1, 2},
+     {3, 0, 0, 4, 4, 2, 2},
+     {3, 3, 4, 4, 4, 2, 2},
+     {3, 3, 4, 4, 6, 6, 2},
+     {3, 5, 5, 5, 6, 6, 6},
+     {3, 5, 5, 5, 5, 6, 6}
+     });
+// or we can use one of default forms
+Game game = Generator.generate(7, 5 * 1000, 10, 1000000, Puzzle7.FORM2.toArray());
+        
+// score of generated puzzle
+System.out.println("Score: " + game.getScore());
+// puzzle
+System.out.println("Puzzle");
+System.out.println(game.getQuestion());
+// solved puzzle
+System.out.println("Solved");
+System.out.println(game.getAnswer());
+// Form of puzzle (return null if classic form)
+// use game.getQuestion().isClassicForm() to check classic form.
+game.getQuestion().getForm();
+```
 
 ## Solver
 

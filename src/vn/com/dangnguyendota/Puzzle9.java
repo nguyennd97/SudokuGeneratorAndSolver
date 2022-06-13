@@ -9,6 +9,10 @@ public class Puzzle9 extends Puzzle {
         public Form(int[][] form) {
             this.form = form;
         }
+
+        public int[][] toArray() {
+            return form;
+        }
     }
 
     public static Form[] FORMS = new Form[]{};

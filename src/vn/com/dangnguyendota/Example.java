@@ -61,7 +61,17 @@ public class Example {
     }
 
     static void generate() {
-        Game game = Generator.generate(7, 5 * 1000, 10, 1000000);
+//         Game game = Generator.generate(7, 5 * 1000, 10, 1000000, Puzzle7.FORM2.toArray());
+//        Game game = Generator.generate(7, 5 * 1000, 10, 1000000);
+         Game game = Generator.generate(7, 5 * 1000, 10, 1000000, new int[][]{
+                 {0, 0, 1, 1, 1, 1, 2},
+                 {0, 0, 0, 1, 1, 1, 2},
+                 {3, 0, 0, 4, 4, 2, 2},
+                 {3, 3, 4, 4, 4, 2, 2},
+                 {3, 3, 4, 4, 6, 6, 2},
+                 {3, 5, 5, 5, 6, 6, 6},
+                 {3, 5, 5, 5, 5, 6, 6}
+         });
         System.out.println("score: " + game.getScore());
         System.out.println("Question");
         System.out.println(game.getQuestion());

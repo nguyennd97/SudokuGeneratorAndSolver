@@ -8,24 +8,35 @@ import static vn.com.dangnguyendota.Puzzle.EmptySquare;
 public class Generator {
     private static final Random random = new Random();
 
+    public static Game generate(int size, long time, int minScore, int maxScore) {
+        return generate(size, time, minScore, maxScore, null);
+    }
+
+    public static Game generate(int size, long time, int maxScore) {
+        return generate(size, time, maxScore, null);
+    }
+
+
     /**
      * generate random game contain solved puzzle, puzzle and score of puzzle
-     * @param size the type of puzzle (example: puzzle 9x9 size = 9, 7x7 size = 7)
-     * @param time maximum thinking time (millisecond)
+     *
+     * @param size     the type of puzzle (example: puzzle 9x9 size = 9, 7x7 size = 7)
+     * @param time     maximum thinking time (millisecond)
      * @param minScore the minimum of puzzle score
      * @param maxScore the maximum of puzzle score
+     * @param form     the form of puzzle, set null if using a random registered form
      * @return Game
      */
-    public static Game generate(int size, long time, int minScore, int maxScore) {
-        if(minScore > maxScore) throw new IllegalArgumentException("Min score is bigger than max score");
+    public static Game generate(int size, long time, int minScore, int maxScore, int[][] form) {
+        if (minScore > maxScore) throw new IllegalArgumentException("Min score is bigger than max score");
         long from = System.currentTimeMillis();
 
         while (true) {
-            Game game = Generator.generate(size, time, maxScore);
+            Game game = Generator.generate(size, time, maxScore, form);
 
             // only accept puzzle with score between minScore and maxScore
             // if score is not as expected, try again
-            if(game.getScore() >= minScore && game.getScore() <= maxScore) {
+            if (game.getScore() >= minScore && game.getScore() <= maxScore) {
                 return game;
             }
 
@@ -37,14 +48,16 @@ public class Generator {
 
     /**
      * generate random game contain solved puzzle, puzzle and score of puzzle
-     * @param size the type of puzzle (example: puzzle 9x9 size = 9, 7x7 size = 7)
-     * @param time maximum thinking time (millisecond)
+     *
+     * @param size     the type of puzzle (example: puzzle 9x9 size = 9, 7x7 size = 7)
+     * @param time     maximum thinking time (millisecond)
      * @param maxScore the maximum of puzzle score
+     * @param form     the form of puzzle, set null if using a random registered form
      * @return Game
      */
-    public static Game generate(int size, long time, int maxScore) {
+    public static Game generate(int size, long time, int maxScore, int[][] form) {
         // random answer first
-        Puzzle answer = PuzzleFactory.newSolvedPuzzle(size);
+        Puzzle answer = PuzzleFactory.newSolvedPuzzle(size, form);
         if (answer == null) {
             throw new IllegalArgumentException("invalid input");
         }
@@ -88,7 +101,7 @@ public class Generator {
             // if current score is greater than old score
             // set question back to old question and break the loop
             int score = question.difficultyScore(answer);
-            if(score > maxScore) {
+            if (score > maxScore) {
                 question.set(row, col, value);
                 break;
             }

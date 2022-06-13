@@ -19,6 +19,10 @@ public class Puzzle4 extends Puzzle {
         public Form(int[][] form) {
             this.form = form;
         }
+
+        public int[][] toArray() {
+            return form;
+        }
     }
 
     public static Form FORM1 = new Form(new int[][]{
