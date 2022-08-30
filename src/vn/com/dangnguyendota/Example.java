@@ -13,51 +13,71 @@ public class Example {
         // the number of puzzles want to generate
         int numberOfPuzzles = 100;
         // the minimum of score
-        int minScore = 1;
+        int minScore = 2001;
         // the maximum of score
-        int maxScore = 10000000;
+        int maxScore = 1000000;
         // maximum thinking time (millisecond)
-        long time = 60 * 5000;
+        long time = 1000;
         // the path where result will be stored
-        String path = String.format("example-result/sudoku%dx%d/Gen.txt", level, level);
+        String path = String.format("example-result/sudoku%dx%d/Level_5.txt", level, level);
 
         // list of sudoku puzzle
-        ArrayList<Game> games = new ArrayList<>();
+        // ArrayList<Game> games = new ArrayList<>();
         while (numberOfPuzzles > 0) {
             Game game = Generator.generate(level, time, minScore, maxScore);
             System.out.println(game.getQuestion());
             System.out.println(game.getScore());
-            games.add(game);
+            if (game.getScore() < minScore) {
+                continue;
+            }
+//            games.add(game);
             numberOfPuzzles--;
             System.out.println(numberOfPuzzles + " number of puzzles left");
-        }
 
-        // sort puzzles by score
-        games.sort((o1, o2) -> {
-            if (o1.getScore() == o2.getScore()) return 0;
-            return o1.getScore() > o2.getScore() ? 1 : -1;
-        });
-
-        // write result to file
-        int index = 1;
-        StringBuilder out = new StringBuilder();
-        for (Game game : games) {
+            // write
+            StringBuilder out = new StringBuilder();
             out.append(Util.newLine);
-            out.append("Puzzle number: ").append(index++);
+            out.append("Puzzle number: ").append(numberOfPuzzles);
             out.append(Util.newLine);
             out.append("Difficulty score: ").append(game.getScore());
             out.append(Util.newLine);
             out.append(game.getQuestion());
             out.append(Util.newLine);
             out.append(game.getAnswer());
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(path, true), StandardCharsets.UTF_8))) {
+                writer.write(out.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(path), StandardCharsets.UTF_8))) {
-            writer.write(out.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        // sort puzzles by score
+//        games.sort((o1, o2) -> {
+//            if (o1.getScore() == o2.getScore()) return 0;
+//            return o1.getScore() > o2.getScore() ? 1 : -1;
+//        });
+//
+//        // write result to file
+//        int index = 1;
+//        StringBuilder out = new StringBuilder();
+//        for (Game game : games) {
+//            out.append(Util.newLine);
+//            out.append("Puzzle number: ").append(index++);
+//            out.append(Util.newLine);
+//            out.append("Difficulty score: ").append(game.getScore());
+//            out.append(Util.newLine);
+//            out.append(game.getQuestion());
+//            out.append(Util.newLine);
+//            out.append(game.getAnswer());
+//        }
+//
+//        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+//                new FileOutputStream(path, true), StandardCharsets.UTF_8))) {
+//            writer.write(out.toString());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     static void generate() {
@@ -99,7 +119,7 @@ public class Example {
     }
 
     public static void main(String... args) {
-//        generateAndSaveToFile();
+        generateAndSaveToFile();
 //        generate();
 //        solve();
     }
