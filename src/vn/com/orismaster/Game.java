@@ -1,4 +1,4 @@
-package vn.com.dangnguyendota;
+package vn.com.orismaster;
 
 public class Game {
     private Puzzle question;

@@ -1,4 +1,4 @@
-package vn.com.dangnguyendota;
+package vn.com.orismaster;
 
 public class Puzzle12 extends Puzzle {
     public Puzzle12() {

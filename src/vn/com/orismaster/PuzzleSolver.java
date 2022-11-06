@@ -1,9 +1,9 @@
-package vn.com.dangnguyendota;
+package vn.com.orismaster;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static vn.com.dangnguyendota.Puzzle.EmptySquare;
+import static vn.com.orismaster.Puzzle.EmptySquare;
 
 public class PuzzleSolver {
     private boolean reduction = false;

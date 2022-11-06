@@ -1,6 +1,6 @@
-package vn.com.dangnguyendota;
+package vn.com.orismaster;
 
-import static vn.com.dangnguyendota.Puzzle.EmptySquare;
+import static vn.com.orismaster.Puzzle.EmptySquare;
 
 public class BacktrackingSolution {
     int numberOfSolutions = 0;

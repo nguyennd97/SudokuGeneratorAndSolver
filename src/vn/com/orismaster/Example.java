@@ -1,4 +1,4 @@
-package vn.com.dangnguyendota;
+package vn.com.orismaster;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

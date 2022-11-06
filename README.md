@@ -361,7 +361,7 @@ Support Classic Form Only
 #### 25x25
 Support Classic Form Only
 
-See Example: https://github.com/dangnguyendota/SudokuGeneratorAndSolver/blob/master/src/vn/com/dangnguyendota/Example.java
+See Example: https://github.com/orismaster/SudokuGeneratorAndSolver/blob/master/src/vn/com/orismaster/Example.java
 
 Supported:
 - 4x4
